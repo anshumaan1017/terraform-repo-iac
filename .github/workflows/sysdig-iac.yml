@@ -33,11 +33,6 @@ jobs:
           sysdig-secure-url: https://app.in1.sysdig.com
           cli-scanner-version: 1.9.0
           iac-scan-path: .
-          minimum-severity: low
+          minimum-severity: critical
           recursive: true
 
-      - name: Upload SARIF Report to GitHub Security Tab
-        if: always()
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: sarif.json
