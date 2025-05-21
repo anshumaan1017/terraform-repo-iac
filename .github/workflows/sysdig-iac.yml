@@ -1,10 +1,10 @@
-name: Aqua
+name: Sysdig
 on: 
   pull_request:
   push:
 jobs:
   aqua:
-    name: Aqua scanner
+    name: Sysdig scanner
     runs-on: ubuntu-latest
     permissions:
       contents: read
