@@ -20,19 +20,45 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Decode Sysdig Token from Secrets
-        id: decode_token
+      # - name: Decode Sysdig Token from Secrets
+      #   id: decode_token
+      #   run: |
+      #     echo "SYSDIG_SECURE_TOKEN=$(echo '${{ secrets.SYSDIG_SECURE_TOKEN_B64 }}' | base64 -d)" >> $GITHUB_ENV
+
+      # - name: Run Sysdig IaC Scan
+      #   uses: sysdiglabs/scan-action@v5
+      #   with:
+      #     sysdig-secure-token: ${{ env.SYSDIG_SECURE_TOKEN }}
+      #     mode: iac
+      #     sysdig-secure-url: https://app.in1.sysdig.com
+      #     cli-scanner-version: 1.9.0
+      #     iac-scan-path: .
+      #     #minimum-severity: critical
+      #     recursive: true
+
+      - name: Decode Sysdig Token
         run: |
           echo "SYSDIG_SECURE_TOKEN=$(echo '${{ secrets.SYSDIG_SECURE_TOKEN_B64 }}' | base64 -d)" >> $GITHUB_ENV
+          echo "::add-mask::$(echo '${{ secrets.SYSDIG_SECURE_TOKEN_B64 }}' | base64 -d)"
+      - name: Download sysdig-cli-scanner
+        run: |
+          VERSION=$(curl -sL https://download.sysdig.com/scanning/sysdig-cli-scanner/latest_version.txt)
+          curl -LO "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/${VERSION}/linux/amd64/sysdig-cli-scanner"
+          chmod +x ./sysdig-cli-scanner
+          sudo mv ./sysdig-cli-scanner /usr/local/bin/
+          sysdig-cli-scanner --help
+          sysdig-cli-scanner --version 
+      - name: Run IaC Scan with Sysdig CLI
+        run: |
+          sysdig-cli-scanner --iac \
+            -r \
+            -f h \
+            --apiurl=https://app.in1.sysdig.com \
+            --output-json sysdig-iac-results.json \
+            .
+        env:
+          SECURE_API_TOKEN: ${{ env.SYSDIG_SECURE_TOKEN }}
+      
 
-      - name: Run Sysdig IaC Scan
-        uses: sysdiglabs/scan-action@v5
-        with:
-          sysdig-secure-token: ${{ env.SYSDIG_SECURE_TOKEN }}
-          mode: iac
-          sysdig-secure-url: https://app.in1.sysdig.com
-          cli-scanner-version: 1.9.0
-          iac-scan-path: .
-          #minimum-severity: critical
-          recursive: true
+  
 
