@@ -1,10 +1,10 @@
-name: Aqua
+name: Sysdig-IaC
 on: 
   pull_request:
   push:
 jobs:
   aqua:
-    name: Aqua scanner
+    name: Sysdig-IaC
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -27,7 +27,6 @@ jobs:
         with:
           sysdig-secure-token: ${{ env.SYSDIG_SECURE_TOKEN }}
           mode: iac
-          iac-scan-path: . 
           
       - name: Upload SARIF Report to GitHub Security Tab
         if: always()
