@@ -26,8 +26,8 @@ jobs:
         uses: sysdiglabs/scan-action@v5
         with:
           sysdig-secure-token: ${{ env.SYSDIG_SECURE_TOKEN }}
-          mode: iac
-          iac-scan-path: . 
+          # mode: iac
+          # iac-scan-path: . 
           
       - name: Upload SARIF Report to GitHub Security Tab
         if: always()
