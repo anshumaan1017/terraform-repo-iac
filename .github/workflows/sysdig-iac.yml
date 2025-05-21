@@ -30,6 +30,7 @@ jobs:
         with:
           sysdig-secure-token: ${{ env.SYSDIG_SECURE_TOKEN }}
           mode: iac
+          sysdig-secure-url: https://app.in1.sysdig.com
           cli-scanner-version: 1.9.0
           iac-scan-path: .
           minimum-severity: low
