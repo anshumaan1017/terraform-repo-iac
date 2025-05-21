@@ -33,6 +33,6 @@ jobs:
           sysdig-secure-url: https://app.in1.sysdig.com
           cli-scanner-version: 1.9.0
           iac-scan-path: .
-          minimum-severity: critical
+          #minimum-severity: critical
           recursive: true
 
